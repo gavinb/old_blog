@@ -1,8 +1,8 @@
 ---
 layout: post
 title: "STL: Filtering"
-category: 
-tags: []
+category: Coding
+tags: [C++,STL]
 ---
 {% include JB/setup %}
 

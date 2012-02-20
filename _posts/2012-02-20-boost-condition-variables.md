@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Boost Condition Variables"
-category: 
-tags: []
+category: boost
+tags: [boost,c++,threading]
 ---
 {% include JB/setup %}

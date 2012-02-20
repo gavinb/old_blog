@@ -1,8 +1,8 @@
 ---
 layout: post
 title: "Improve your C++: Const Correctness"
-category: 
-tags: []
+category: Coding
+tags: [C++]
 ---
 {% include JB/setup %}
 

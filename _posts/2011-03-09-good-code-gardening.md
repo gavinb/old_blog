@@ -1,8 +1,8 @@
 ---
 layout: post
 title: "Good Code Gardening"
-category: 
-tags: []
+category: Craft
+tags: [coding,craft]
 ---
 {% include JB/setup %}
 

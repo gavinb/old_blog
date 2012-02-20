@@ -1,8 +1,8 @@
 ---
 layout: post
 title: "25 Tips for Mercirual Users"
-category: 
-tags: []
+category: VersionControl
+tags: [dvcs,cvs,hg,Mercurial]
 ---
 {% include JB/setup %}
 

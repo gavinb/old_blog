@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "Threading with Boost   Part I: Creating Threads"
-category: 
-tags: []
+title: "Threading with Boost - Part I: Creating Threads"
+category: boost
+tags: [boost,c++,threading]
 ---
 {% include JB/setup %}
 
