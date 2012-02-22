@@ -2,7 +2,7 @@
 layout: post
 title: "STL: Iterators and Performance"
 category: Coding
-tags: [C++,STL,performance]
+tags: [C++, STL, Performance]
 ---
 {% include JB/setup %}
 

@@ -2,7 +2,7 @@
 layout: post
 title: "STL Warts: When removing isn't"
 category: Coding
-tags: [C++,coding,STL]
+tags: [C++, STL]
 ---
 {% include JB/setup %}
 

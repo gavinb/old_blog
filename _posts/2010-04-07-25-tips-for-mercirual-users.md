@@ -2,7 +2,7 @@
 layout: post
 title: "25 Tips for Mercirual Users"
 category: VersionControl
-tags: [dvcs,cvs,hg,Mercurial]
+tags: [DVCS, Mercurial, Git]
 ---
 {% include JB/setup %}
 

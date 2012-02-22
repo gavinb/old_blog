@@ -2,7 +2,7 @@
 layout: post
 title: "The First User"
 category: Craft
-tags: [craft]
+tags: []
 ---
 {% include JB/setup %}
 

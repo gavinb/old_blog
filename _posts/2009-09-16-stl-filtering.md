@@ -2,7 +2,7 @@
 layout: post
 title: "STL: Filtering"
 category: Coding
-tags: [C++,STL]
+tags: [C++, STL]
 ---
 {% include JB/setup %}
 

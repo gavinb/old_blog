@@ -2,7 +2,7 @@
 layout: post
 title: "Debugging NSBezierPath drawing"
 category: Coding
-tags: [Apple,OSX,Mac]
+tags: [Cocoa, Mac, OSX]
 ---
 {% include JB/setup %}
 

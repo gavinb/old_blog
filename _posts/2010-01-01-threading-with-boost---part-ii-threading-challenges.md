@@ -1,8 +1,8 @@
 ---
 layout: post
 title: "Threading with Boost - Part II: Threading Challenges"
-category: boost
-tags: [boost,c++,threading]
+category: Boost
+tags: [Boost, C++, Threading]
 ---
 {% include JB/setup %}
 

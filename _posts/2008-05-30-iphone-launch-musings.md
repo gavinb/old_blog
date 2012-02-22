@@ -2,7 +2,7 @@
 layout: post
 title: "iPhone launch musings"
 category: Apple
-tags: [Apple,iPhone]
+tags: [Apple, iPhone, iOS]
 ---
 {% include JB/setup %}
 

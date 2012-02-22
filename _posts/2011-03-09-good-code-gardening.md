@@ -2,7 +2,7 @@
 layout: post
 title: "Good Code Gardening"
 category: Craft
-tags: [coding,craft]
+tags: [Coding, Craft]
 ---
 {% include JB/setup %}
 
