@@ -68,7 +68,7 @@ Let's use a simple Customer class as an example.  This is valid, but not really 
 	        std::string _name;
 	        // ...
 	};
-	&nbsp;
+	
 	// ...and elsewhere...
 	unsigned Invoice::addCustomer(Customer&amp; cust)
 	{
@@ -107,7 +107,7 @@ So the above code becomes:
 	        std::string _name;
 	        // ...
 	};
-	&nbsp;
+	
 	// ...and elsewhere...
 	unsigned Invoice::addCustomer(const Customer&amp; cust)
 	{

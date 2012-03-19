@@ -45,13 +45,17 @@ Example: A Counter
 
 Even a simple increment operation, which is only a single operation in C++, may actually be the source of a race condition.  Consider:
 
-    m_SequenceNumber++;
+{%highlight c++%}
+m_SequenceNumber++;
+{%endhighlight%}
 
 which actually translates (on the x86 architecture) to something like:
 
+{%highlight asm%}
 	movl	-12(%ebp), %eax
 	incl	%eax
 	movl	%eax, -12(%ebp)
+{%endhighlight%}
 
 which is a load, increment, then store.  So there are actually *two* potential points that a race condition could occur - between the load and the increment, and between the increment and the save.
 
@@ -83,18 +87,20 @@ Example: Accessing a Queue
 
 An illustration of a race condition is where multiple threads are removing work items from a queue.  Imagine some code that looks something like this:
 
-    void unsafeWorkerThread()
+{%highlight c++%}
+void unsafeWorkerThread()
+{
+    while ( unsafeWorkerThreadRunning )
     {
-        while ( unsafeWorkerThreadRunning )
+        // Warning: this is not thread-safe!
+        if ( !queue.isEmpty() )
         {
-            // Warning: this is not thread-safe!
-            if ( !queue.isEmpty() )
-            {
-                work_t item = queue.pop();
-                process(item);
-            }
+            work_t item = queue.pop();
+            process(item);
         }
     }
+}
+{%endhighlight%}
 
 This is not thread-safe!  Even if we assume that the queue operations themselves are atomic (which is usually *not* the case for most container classes!), there is a race condition waiting to trigger a failure.  Can you spot it?
 
@@ -102,21 +108,23 @@ Imagine there are two threads running, and there is one work item in the queue. 
 
 The simplest solution is to protect the queue with a mutex, and lock it around the inner block.  (There's another improvement we can make after we discuss exceptions.)
 
-    void workerThread()
+{%highlight c++%}
+void workerThread()
+{
+    while ( workerThreadRunning )
     {
-        while ( workerThreadRunning )
+        queueMutex.lock();
+
+        if ( !queue.isEmpty() )
         {
-            queueMutex.lock();
-            &nbsp;
-            if ( !queue.isEmpty() )
-            {
-                work_t item = queue.pop();
-                process(item);
-            }
-            &nbsp;
-            queueMutex.unlock();
+            work_t item = queue.pop();
+            process(item);
         }
+
+        queueMutex.unlock();
     }
+}
+{%endhighlight%}
 
 (There are more esoteric solutions to this problem, such as lock-free data structures, but those are beyond the scope of this series.)
 
@@ -125,28 +133,30 @@ Problem: Deadlocks
 
 In a non-trivial application, there may be several threads and numerous mutexes.  When more than one thread locks more than one mutex, there arises the potential for a condition known as a *deadlock*.  This is where one thread is holding a lock while waiting for another to become available, while a second thread is holding the second lock and waiting for the first lock to become available.  Since they are both waiting for each other to finish, neither can run.  This deadlocked situation can be more involved, whereby several threads form a ring of holding and waiting for locks.  This is illustrated as follows, first in code then as a diagram:
 
-    void threadA()
+{%highlight c++%}
+void threadA()
+{
+    while (running)
     {
-        while (running)
-        {
-            mutexOne.lock();
-            mutexTwo.lock();
-            processStuff();
-            mutexOne.unlock();
-            mutexTwo.unlock();
-        }
+        mutexOne.lock();
+        mutexTwo.lock();
+        processStuff();
+        mutexOne.unlock();
+        mutexTwo.unlock();
     }
-    void threadB()
+}
+void threadB()
+{
+    while (running)
     {
-        while (running)
-        {
-            mutexTwo.lock();
-            mutexOne.lock();
-            processStuff();
-            mutexTwo.unlock();
-            mutexOne.unlock();
-        }
+        mutexTwo.lock();
+        mutexOne.lock();
+        processStuff();
+        mutexTwo.unlock();
+        mutexOne.unlock();
     }
+}
+{%endhighlight%}
 
 <img src="http://antonym.org/boost/DeadlockAnimation.gif" alt="DeadlockAnimation.gif" border="0" width="561" height="249" />
 
@@ -161,22 +171,24 @@ As with non-threaded code, you should always catch the most specific exception t
 
 A skeleton thread function might look something like:
 
-    void processThread()
+{%highlight c++%}
+void processThread()
+{
+    while(keepProcessing)
     {
-        while(keepProcessing)
+        try
         {
-            try
-            {
-                // Do actual work
-            }
-            // Catch more specific exceptions first if you can
-            catch (std::exception&amp; exc)
-            {
-                log("Uncaught exception: " + exc.what());
-                // Maybe return here?
-            }
+            // Do actual work
+        }
+        // Catch more specific exceptions first if you can
+        catch (std::exception&amp; exc)
+        {
+            log("Uncaught exception: " + exc.what());
+            // Maybe return here?
         }
     }
+}
+{%endhighlight%}
 
 Just as an errant exception can cause havoc with threads running, they can also cause problems with mutexes.  The next article shows how to use a *lock guard* to ensure mutexes are unlocked, even if an exception is thrown.
 

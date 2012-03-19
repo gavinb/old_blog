@@ -43,9 +43,11 @@ And before we dive in, a quick note on doing "real work"... In the examples belo
 
 The simplest way to sleep for a given duration using Boost is to first create a time duration object, and then pass this to the `sleep` method of the special `boost::this_thread` class.  The `this_thread` class gives us a convenient way to refer to the currently running thread, when we otherwise may not be able to access it directly (ie. within an arbitrary function).  Here's how to sleep for a few seconds:
 
-    // Three seconds of pure, hard work!
-    boost::posix\_time::seconds workTime(3);
-    boost::this\_thread::sleep(workTime);
+{%highlight c++%}
+// Three seconds of pure, hard work!
+boost::posix_time::seconds workTime(3);
+boost::this_thread::sleep(workTime);
+{%endhighlight%}
 
 In the `main()` function, we then wait for the worker thread to complete using the `join()` method.  This will cause the main thread to sleep until the worker thread completes (successfully or otherwise).
 
@@ -64,36 +66,38 @@ The simplest threading scenario is where you have a simple (C-style) function th
 
 The following example shows how.  First, we include the correct Boost thread header, create the thread object and pass in our worker function.  The main thread in the process will then wait for the thread to complete.
 
-    #include <iostream>
-    #include <boost/thread.hpp>
-    #include <boost/date_time.hpp>
+{%highlight c++%}
+#include <iostream>
+#include <boost/thread.hpp>
+#include <boost/date_time.hpp>
+
+void workerFunc()
+{
+    boost::posix_time::seconds workTime(3);
     
-    void workerFunc()
-    {
-        boost::posix\_time::seconds workTime(3);
-        &nbsp;
-        std::cout << "Worker: running" << std::endl;
-        &nbsp;
-        // Pretend to do something useful...
-        boost::this_thread::sleep(workTime);
-        &nbsp;
-        std::cout << "Worker: finished" << std::endl;
-    }
+    std::cout << "Worker: running" << std::endl;
     
-    int main(int argc, char* argv[])
-    {
-        std::cout << "main: startup" << std::endl;
-        &nbsp;
-        boost::thread workerThread(workerFunc);
-        &nbsp;
-        std::cout << "main: waiting for thread" << std::endl;
-        &nbsp;
-        workerThread.join();
-        &nbsp;
-        std::cout << "main: done" << std::endl;
-        &nbsp;
-        return 0;
-    }
+    // Pretend to do something useful...
+    boost::this_thread::sleep(workTime);
+    
+    std::cout << "Worker: finished" << std::endl;
+}
+
+int main(int argc, char* argv[])
+{
+    std::cout << "main: startup" << std::endl;
+    
+    boost::thread workerThread(workerFunc);
+    
+    std::cout << "main: waiting for thread" << std::endl;
+    
+    workerThread.join();
+    
+    std::cout << "main: done" << std::endl;
+    
+    return 0;
+}
+{%endhighlight%}
 
 When you run the program, you should see output similar to the following:
 
@@ -113,11 +117,15 @@ So the above function wasn't terribly useful by itself.  We really want to be ab
 
 Let's say your thread function had the following signature:
 
-    void workerFunc(const char* msg, unsigned delaySecs) //...
+{%highlight c++%}
+void workerFunc(const char* msg, unsigned delaySecs) //...
+{%endhighlight%}
 
 You simply pass the arguments to the thread constructor after the name of the thread function, thus:
 
-    boost::thread workerThread(workerFunc, "Hello, boost!", 3);
+{%highlight c++%}
+boost::thread workerThread(workerFunc, "Hello, boost!", 3);
+{%endhighlight%}
 
 This example is called 't2' in the source examples.
 
@@ -128,66 +136,70 @@ A functor is a fancy name for an object that can be called just like a function.
 
 This is what our functor looks like:
 
-    class Worker
+{%highlight c++%}
+class Worker
+{
+public: 
+    
+    Worker(unsigned N, float guess, unsigned iter) 
+            : m_Number(N),
+              m_Guess(guess),
+              m_Iterations(iter)
     {
-    public: 
-        &nbsp;
-        Worker(unsigned N, float guess, unsigned iter) 
-                : m\_Number(N),
-                  m\_Guess(guess),
-                  m\_Iterations(iter)
+    }
+    
+    void operator()()
+    {
+        std::cout << "Worker: calculating sqrt(" << m_Number
+                  << "), itertations = "
+                  << m_Iterations << std::endl;
+        
+        // Use Newton's Method
+        float   x;
+        float   x_last = m_Guess;
+        
+        for (unsigned i=0; i < m_Iterations; i++)
         {
+            x = x_last - (x_last*x_last-m_Number)/
+                    (2*x_last);
+            x_last = x;
+            
+            std::cout << "Iter " << i << " = "
+                  << x << std::endl;
         }
-        &nbsp;
-        void operator()()
-        {
-            std::cout << "Worker: calculating sqrt(" << m\_Number
-                      << "), itertations = "
-                      << m\_Iterations << std::endl;
-            &nbsp;
-            // Use Newton's Method
-            float   x;
-            float   x\_last = m\_Guess;
-            &nbsp;
-            for (unsigned i=0; i < m\_Iterations; i++)
-            {
-                x = x\_last - (x\_last*x\_last\-m\_Number)/
-                        (2\*x\_last);
-                x\_last = x;
-                &nbsp;
-                std::cout << "Iter " << i << " = "
-                      << x << std::endl;
-            }
-            &nbsp;
-            std::cout << "Worker: Answer = " << x << std::endl;
-        }
-    &nbsp;
-    private:
-    &nbsp;
-        unsigned    m\_Number;
-        float       m\_Guess;
-        unsigned    m\_Iterations;
-    };
+        
+        std::cout << "Worker: Answer = " << x << std::endl;
+    }
+
+private:
+
+    unsigned    m_Number;
+    float       m_Guess;
+    unsigned    m_Iterations;
+};
+{%endhighlight%}
 
 This worker functor calculates a square root of a number using [Newton-Rhapson's method](http://en.wikipedia.org/wiki/Newton%27s_method), just for fun (ok, I got bored putting sleep in all the threads).  The number, a rough guess and the number of iterations is passed to the constructor.  The calculation (which is in fact extremely fast) is performed in the thread itself, when the `operator()()` gets called.
 
 So in the main code, first we create our callable object, constructing it with any necessary arguments as normal.  Then you pass the instance to the `boost::thread` constructor, which will invoke the `operator()()` method on your functor.  This becomes the new thread, and runs just like any other thread, with the added benefit that it has access to the object's context and other methods.  This approach has the benefit of wrapping up a thread into a convenient bundle.
 
-    int main(int argc, char* argv[])
-    {
-        std::cout << "main: startup" << std::endl;
-        &nbsp;
-        Worker w(612, 10, 5);
-        boost::thread workerThread(w);
-        &nbsp;
-        std::cout << "main: waiting for thread" << std::endl;
-        &nbsp;
-        workerThread.join();
-        &nbsp;
-        std::cout << "main: done" << std::endl;
-        &nbsp;
-        return 0;
-    }
+{%highlight c++%}
+int main(int argc, char* argv[])
+{
+    std::cout << "main: startup" << std::endl;
+    
+    Worker w(612, 10, 5);
+    boost::thread workerThread(w);
+    
+    std::cout << "main: waiting for thread" << std::endl;
+    
+    workerThread.join();
+    
+    std::cout << "main: done" << std::endl;
+    
+    return 0;
+}
+{%endhighlight%}
 
 Note: A very important consideration when using functors with boost threads is that the thread constructor takes the functor parameter *by value*, and thus makes a *copy* of the functor object.  Depending on the design of your functor object, this may have unintended side-effects.  Take care when writing functor objects to ensure that they can be safely copied.
 
@@ -198,8 +210,10 @@ It is frequently convenient to define an object with an instance method that run
 
 Because methods in C++ always have an implicit `this` pointer passed in as the first parameter, we need to make sure we call the object's method using the same convention.  So we will pass the object pointer (or `this` depending on whether we are inside the object or not) as the first parameter, along with any other actual parameters we might have after that, thus:
 
-    Worker w(3);
-    boost::thread workerThread(&Worker::processQueue, &w, 2);
+{%highlight c++%}
+Worker w(3);
+boost::thread workerThread(&Worker::processQueue, &w, 2);
+{%endhighlight%}
 
 As an aside, take care in your own code that you don't accidentally allocate an object on the stack in one place, spawn a thread, then have the object go out of scope and be destroyed before the thread has completed!  This could be the source of many tricky bugs.
 
@@ -214,32 +228,40 @@ So our final example places the thread instance within the object itself, and pr
 
 So now our class declaration has the following data member added:
 
-    //...
-    private:
-        boost::thread    m_Thread;
-    //...
+{%highlight c++%}
+//...
+private:
+    boost::thread    m_Thread;
+//...
+{%endhighlight%}
 
 The `Worker::start()` method spawns the thread which will run the `processQueue` method.  Notice how we pass in `this` as the first bound parameter?  Because we are using an instance method (and not a class method or regular function), we must ensure the first parameter is the instance pointer.  The `N` parameter is the first actual parameter for the thread function, as can be seen in its signature.
 
-    void start(int N)
-    {
-        m_Thread = boost::thread(&Worker::processQueue, this, N);
-    }
+{%highlight c++%}
+void start(int N)
+{
+    m_Thread = boost::thread(&Worker::processQueue, this, N);
+}
+{%endhighlight%}
 
 The join method is very simply:
 
-    void join()
-    {
-        m_Thread.join();
-    }
-    
+{%highlight c++%}
+void join()
+{
+    m_Thread.join();
+}
+{%endhighlight%}
+
 which means our main function becomes no more than:
 
-    Worker worker;
-    &nbsp;
-    worker.start(3);
-    &nbsp;
-    worker.join();
+{%highlight c++%}
+Worker worker;
+
+worker.start(3);
+
+worker.join();
+{%endhighlight%}
 
 This encapsulation of the threading can be very useful, especially when combined with patterns such as the Singleton (which we will look at in a future article).
 

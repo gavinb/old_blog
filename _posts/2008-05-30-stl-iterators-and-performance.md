@@ -6,17 +6,19 @@ tags: [C++, STL, Performance]
 ---
 {% include JB/setup %}
 
-The Standard Template Library (STL) for C++ provides a set of powerful and flexible templated container classes.  Never again will you have to hand-craft a doubly-linked list (and get your pointer arithmetic mixed up) -- just use <tt>std::list&lt;T&gt;</tt>.
+The Standard Template Library (STL) for C++ provides a set of powerful and flexible templated container classes.  Never again will you have to hand-craft a doubly-linked list (and get your pointer arithmetic mixed up) -- just use `std::list<T>`.
 
 Now most of the idiomatic C++ code I've read that uses STL iterators uses the prefix <tt>operator++</tt> to move the iterator forward.  And so I had long ago adopted this too, with a vague recollection of having read somewhere that it performed better.  But why?  Good question... (Updated: fixed formatting, got numbers the right way around.)
 
 The use of the post-increment operator is well established idiomatic code for looping (in both C and C++):
 
-	for ( unsigned i = 0; i &lt; array_length; i++ )
-	{
-		// do something with array[i]
-		// ...
-	}
+{%highlight c++ %}
+for ( unsigned i = 0; i < array_length; i++ )
+{
+	// do something with array[i]
+	// ...
+}
+{%endhighlight%}
 
 When the indexing variable is an ordinal type (usually an integer), the incrementing order makes no difference.  The expressions <tt>++i</tt> and <tt>i++</tt> are identical in this case.  And so many people developing in C++ simply use the same style in C++ with their iterator code.  Why would it matter?
 
@@ -24,11 +26,15 @@ Well, it turns out that it does.  If the indexing variable is a class, such as a
 
 Referring back to Scott Meyer's wonderful <a href="http://www.amazon.com/More-Effective-C%2B%2B-Addison-Wesley-Professional/dp/020163371X/ref=pd_bbs_sr_1/002-4241626-5806441?ie=UTF8&s=books&qid=1190249817&sr=8-1">More Effective C++</a> book, I tracked down the explanation (item 6, page 31), which I will attempt to reproduce here in simplified form.  The signature of the pre-increment <tt>operator++</tt> for a class T is:
 
-	T& operator++(); // prefix
+{%highlight c++ %}
+T& operator++(); // prefix
+{%endhighlight%}
 
 while the post-increment operator had a dummy parameter added to make the signature unique:
 
-	const T operator++( int ); // postfix
+{%highlight c++ %}
+const T operator++( int ); // postfix
+{%endhighlight%}
 
 But that isn't the only difference - notice that the prefix operator returns a <i>reference</i> to the object itself (permitting chaining of method calls), while the postfix operator returns a <i>const object</i>, semantically defined as the previous value.  (This is for consistency with the behaviour of ordinal types.)
 
@@ -42,11 +48,13 @@ The results were very interesting: on an Intel workstation, the pre-increment co
 
 So - it really does improve the performance of your code to write:
 
-	mylist::const_iterator it;
-	for ( it = numbers.begin(); it != numbers.end(); ++it )
-	{
-		// do something with *it
-	}
+{%highlight c++ %}
+mylist::const_iterator it;
+for ( it = numbers.begin(); it != numbers.end(); ++it )
+{
+	// do something with *it
+}
+{%endhighlight%}
 
 For small arrays, it may not make much of a noticeable difference, but every cycle counts, and a little consistency goes a long way.  Using the prefix increment will enable your application to scale better.
 
@@ -56,14 +64,20 @@ I have provided the test source in C++, along with an R script to summarise and 
 
 As one final note, the wonderful <a href="http://www.boost.org/">Boost++ library</a> provides the <tt>foreach</tt> module, which provides a powerful wrapper to iterate over containers with a nice clean simple syntax:
 
-	int total = 0;
-	foreach( int num, numbers )
-	{
-		total += num;
-	}
+{%highlight c++ %}
+int total = 0;
+foreach( int num, numbers )
+{
+	total += num;
+}
+{%endhighlight%}
 
 And yes, it uses the pre-increment operator for maximum performance.
 
 Download the source used for this article:
 
- * <a href="http://antonym.org/iterperf/iterperf-0.1.zip">iterperf-0.1.zip</a>
+ - http://antonym.org/iterperf/iterperf-0.1.zip
+
+or browse on BitBucket:
+
+ - http://bitbucket.org/gavinb/blogcode

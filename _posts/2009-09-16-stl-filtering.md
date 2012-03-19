@@ -20,40 +20,48 @@ we expect to see the result:
 
 A predicate function is essentially a test for a property, and returns whether or not the parameter has this property.  So our predicate function will take an integer value (matching the element type of our vector) and return a boolean, denoting whether or not to remove the given element.  So we'd have:
 
-	bool is_even(int N)
-	{
-	    return N % 2 == 0;
-	}
+{% highlight c++%}
+bool is_even(int N)
+{
+    return N % 2 == 0;
+}
+{% endhighlight %}
 
 Easy!  Now, to store our numbers, we would start with a simple vector of integers, thus:
 
-	typedef std::vector<int> vector_t;
-	&nbsp;
-	vector_t    numbers;
+{% highlight c++%}
+typedef std::vector<int> vector_t;
+
+vector_t    numbers;
+{% endhighlight %}
 
 We read in the numbers in a loop and save them in the array:
 
-    while (true)
-    {
-        int n;
-        &nbsp;
-        std::cin >> n;
-        &nbsp;
-        if (!std::cin.good())
-            break;
-        &nbsp;
-        numbers.push_back(n);
-    }
+{% highlight c++%}
+while (true)
+{
+    int n;
+
+    std::cin >> n;
+
+    if (!std::cin.good())
+        break;
+
+    numbers.push_back(n);
+}
+{% endhighlight %}
 
 This will take care of reading in the data, as it will stop as soon as it reads something that isn't an integer, or reaches the end of file.  Now we just apply the filter, and then print the result:
 
-    remove_if(numbers.begin(), numbers.end(), is_even);
-    &nbsp;
-    vector_t::iterator it;
-    for (it = numbers.begin(); it != numbers.end(); ++it)
-    {
-        std::cout << *it << std::endl;
-    }
+{% highlight c++%}
+remove_if(numbers.begin(), numbers.end(), is_even);
+
+vector_t::iterator it;
+for (it = numbers.begin(); it != numbers.end(); ++it)
+{
+    std::cout << *it << std::endl;
+}
+{% endhighlight %}
 
 There, we're done!  Now, we just run the completed program, and give it some test data:
 
@@ -86,7 +94,9 @@ It is worth pointing out right about now that the fine folk who designed the STL
 
 Ah, we were actually supposed to do something with the return value!  The implementation of `remove_if` moves (or actually copies) the values to be kept to the head of the list, and returns an iterator pointing to the start of the "junk" (just after the filtered list), in preparation for this tail to be snipped off.  So, let's use the `erase` method to do just that:
 
+{% highlight c++ %}
     numbers.erase(remove_if(numbers.begin(), numbers.end(), is_even), numbers.end());
+{% endhighlight %}
 
 Now, running the test application again, we get the output:
 
