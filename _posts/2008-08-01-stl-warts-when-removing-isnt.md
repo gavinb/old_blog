@@ -16,7 +16,7 @@ Simple question, surely... Your answer?
 
 If you said "it removes the value t from the list between the two iterators" then -- bzzzzt, thank you for playing.  It doesn't actually remove anything.  Quoting from the description:
 
-> Reorders the range [first,last) to prepare for erasing all elements of equal value.
+> Reorders the range `[first,last)` to prepare for erasing all elements of equal value.
 
 So the way to *actually* erase something from a `std::vector`:
 
