@@ -6,7 +6,7 @@ tags: []
 ---
 {% include JB/setup %}
 
-Something occurred to me the other day, while hacking away on some code in [Emacs](http://www.emacswiki.org/) (the world's greatest editor).  What we, as professional Software Engineers, do on a daily basis is to work with *patches* (or if you prefer, *diffs*).  Sure, we write lots of code.  But it isn't just random changes - or at least, it shouldn't be!  We're typically managing multiple patches concurrently, probably even multiple source trees in various states of completeness, shepherding them toward release.  So, in my humble opinion, a very important skill in the art of software development is crafting patches (as opposed to simply cutting code).  Yet strangely enough, this perspective and related techniques don't seem to be taught formally.
+Something occurred to me the other day, while hacking away on some code in [Emacs](http://www.emacswiki.org/) (the world's greatest editor).  What we, as professional Software Engineers, really do on a daily basis is to work with *patches* (or if you prefer, *diffs*).  Sure, we write lots of code.  But it isn't just random changes - or at least, it shouldn't be!  We're typically managing multiple patches concurrently, probably even multiple source trees in various states of completeness, shepherding them toward release.  So, in my humble opinion, a very important skill in the art of software development is crafting patches (as opposed to simply cutting code).  Yet strangely enough, this perspective and related techniques don't seem to be taught formally.
 
 The common meaning of the word "patch" is to mend something with a piece of cloth, make a temporary electrical connection or a makeshift fix.  This  makes it sound like what we do is write layers of hacks that we plaster on as we go, rather than crafting an elegant solution or extension to the existing features.  So - rather than thinking of a patchwork quilt, imagine instead we are weaving and re-weaving a fine tapestry, trying to make our alterations invisible and seamless.
 
@@ -23,7 +23,7 @@ It is worth noting at this point that this discussion is conceptually at a level
 Good Practices
 ==============
 
-I have tried to collect here some good practices for producing patches, as I have not seen this described elsewhere (that I can recall).  If you have suggestions of your own, please contribute in the comments.  These aren't intended to be comprehensive, let alone prescriptive, but hopefully a good start.
+I have tried to collect here some good practices for producing patches, as I have not seen this detailed elsewhere (that I can recall).  If you have suggestions of your own, please contribute in the comments.  This isn't intended to be a comprehensive list, let alone prescriptive, but hopefully a good start.
 
  * A patch should address a single feature or bug fix.  Do not mix different changes in the one patch.
  * Do not make unnecessary or irrelevant changes (even whitespace, unless required).
