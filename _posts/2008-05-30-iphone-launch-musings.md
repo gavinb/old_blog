@@ -42,14 +42,14 @@ So then the SDK comes out.  And once again, the pundits are out, nit-picking and
 
 Embedded development is characterised by what you *don't* have:
 
- - **Power**: the battery is a very finite and precious resource</li>
+ - **Power**: the battery is a very finite and precious resource
  - **Storage**: you can't assume you have many gigs of free space to play with.  A generous mobile device may only have a few meg available for *all* the apps to share.
- - **Memory**: similar to storage, mobiles don't have much RAM to play with, and usually do not have the luxury of virtual memory.</li>
+ - **Memory**: similar to storage, mobiles don't have much RAM to play with, and usually do not have the luxury of virtual memory.
  - **Processing power**: despite the rapid advances in low-power CPUs and integrated media decoding chips, mobile CPUs compromise processing power for power consumption, and err on the side of lasting longer.
 
 So the upshot of all this is that you have to think very carefully about your data structures so as not to consume too much precious RAM.  You have to be frugal with what you store to avoid filling up the user's memory stick.  You need to be conscious of the complexity of the algorithms and the amount of number-crunching you do to avoid loading up the CPU.  Simply put, the harder the CPU works, the more current it draws and thus the shorter the battery will last.
 
-One developer who "gets it" is Craig Hockenberry, who wrote a <a href="blog entry">http://furbo.org/2008/03/16/brain-surgeons/</a> on this very topic.  He has been experimenting with the unofficial toolchains and has some direct experience and good advice to share.
+One developer who "gets it" is Craig Hockenberry, who wrote a <a href="http://furbo.org/2008/03/16/brain-surgeons/">on this very topic</a>.  He has been experimenting with the unofficial toolchains and has some direct experience and good advice to share.
 
 At first, background processes sound like a great idea.  I've got dozens of things running in the background right now, monitoring things, updating thinks, blinking lights, and so on.  But they all consume power and resources, and this can be a killer on a low-power device.  So while one background process on an iPhone might not seem like such a big deal, consider if 6 of your beloved third-party apps decided to run something in the background?  The available memory for your foreground app is going to be massively limited, as there are 6 other hogs using up resources.  And kiss goodbye to your battery - even if they only wake up every minute or so to check something, those 7 apps could cause the CPU to be waking up every 10 seconds, which is going to chew up the battery very rapidly indeed.
 
