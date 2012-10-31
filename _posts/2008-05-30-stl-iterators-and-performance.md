@@ -24,7 +24,7 @@ When the indexing variable is an ordinal type (usually an integer), the incremen
 
 Well, it turns out that it does.  If the indexing variable is a class, such as an iterator, there are some subtle differences between the pre-increment and post-increment operators that may have a big impact on performance.
 
-Referring back to Scott Meyer's wonderful <a href="http://www.amazon.com/More-Effective-C%2B%2B-Addison-Wesley-Professional/dp/020163371X/ref=pd_bbs_sr_1/002-4241626-5806441?ie=UTF8&s=books&qid=1190249817&sr=8-1">More Effective C++</a> book, I tracked down the explanation (item 6, page 31), which I will attempt to reproduce here in simplified form.  The signature of the pre-increment <tt>operator++</tt> for a class T is:
+Referring back to Scott Meyer's wonderful <a href="http://www.amazon.com/More-Effective-C%2B%2B-Addison-Wesley-Professional/dp/020163371X/">More Effective C++</a> book, I tracked down the explanation (item 6, page 31), which I will attempt to reproduce here in simplified form.  The signature of the pre-increment <tt>operator++</tt> for a class T is:
 
 {%highlight c++ %}
 T& operator++(); // prefix
@@ -76,8 +76,8 @@ And yes, it uses the pre-increment operator for maximum performance.
 
 Download the source used for this article:
 
- - http://antonym.org/iterperf/iterperf-0.1.zip
+ - [http://antonym.org/iterperf/iterperf-0.1.zip](http://antonym.org/iterperf/iterperf-0.1.zip)
 
 or browse on BitBucket:
 
- - http://bitbucket.org/gavinb/blogcode
+ - [http://bitbucket.org/gavinb/blogcode](http://bitbucket.org/gavinb/blogcode)
