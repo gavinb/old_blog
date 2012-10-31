@@ -17,3 +17,5 @@ It's very simple, but very handy as you can easily switch from the normal stroki
 <ul><li>Grab the code (MIT license): <a href="http://antonym.org/files/antonym/bezier_debug.zip">bezier_debug.zip</a> (2kB)</li></ul>
 
 Enjoy!  I'd love to get feedback from anyone who tries this.
+
+ **Update:** This has now been published on [Google Code](http://code.google.com/p/morecocoa) as part of a larger library of useful functions called "More Cocoa". Matthew Tozier is the maintainer.
