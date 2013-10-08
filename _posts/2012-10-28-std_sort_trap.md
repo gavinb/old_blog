@@ -76,7 +76,7 @@ There are numerous accounts of this happening in various contexts:
  * baz
  * bar
 
-The article on Wikipedia on [strict weak ordering](http://en.wikipedia.org/Strict%20Weak%20Ordering) goes into some great detail, but the takeaway message is this:
+The article on Wikipedia on [strict weak ordering](http://en.wikipedia.org/wiki/Strict_weak_ordering) goes into some great detail, but the takeaway message is this:
 
 	4 < 9	T 	!(4 < 9)	F
 	4 < 3	F 	!(4 < 3)	T
